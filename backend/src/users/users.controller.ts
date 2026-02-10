@@ -2,11 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {  ApiSecurity } from '@nestjs/swagger';
+import {  ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiSecurity('api-key')
-@UseGuards(ApiKeyGuard)
+@ApiBearerAuth('jwt')
+@UseGuards(ApiKeyGuard, AuthGuard('jwt'))
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
